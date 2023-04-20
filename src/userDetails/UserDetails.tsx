@@ -4,18 +4,22 @@ import React, { useEffect, useState } from 'react'
 export default function UserDetails() {
     const [useDetails, setUerDetails] = useState<any>(null)
     const [isloding, setLoading] = useState<boolean>(true)
+    const [apiError, setApiError] = useState<string>("")
     const [isRefresh, setRefresh] = useState<boolean>(false)
     const getUsers = async () => {
-        let res = await axios.get("https://randomuser.me/api");
-        const { results, info } = res.data;
-        setUerDetails(results[0])
-        localStorage.setItem("randomuser", JSON.stringify(results[0]))
+        try {
+            let res = await axios.get("https://randomuser.me/api");
+            const { results, info } = res.data;
+            setUerDetails(results[0])
+            localStorage.setItem("randomuser", JSON.stringify(results[0]))
+        } catch (error: any) {
+            setApiError(" Some thing went wrong")
+        }
     };
 
     useEffect(() => {
         getUsers()
         setLoading(false)
-
     }, [])
 
     useEffect(() => {
